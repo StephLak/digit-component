@@ -15,6 +15,12 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _idController = TextEditingController();
   List<Map<String, dynamic>> _searchResults = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _searchResults = DummyData.dummyList;
+  }
+
   Future<void> _searchById() async {
     String id = _idController.text;
     // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
