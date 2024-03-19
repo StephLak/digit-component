@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:digit_assignment/models/dummy_data.dart';
+import 'package:digit_assignment/screens/search_screen.dart';
 import 'package:digit_components/digit_components.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -168,10 +169,10 @@ class FormScreenState extends State<FormScreen> {
                                                       content: Text(
                                                           'Oops ! Please fill the mandatory details')));
                                             }
-                                            Navigator.of(context,
-                                                    rootNavigator: true)
-                                                .pop();
-                                          },
+                                            Navigator.of(context).pushAndRemoveUntil(
+                                                MaterialPageRoute(builder: (context) => const SearchScreen()),
+                                                    (Route<dynamic> route) => false);
+                                            },
                                         ),
                                         secondaryAction: DigitDialogActions(
                                           label: 'Back',
