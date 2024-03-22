@@ -2,7 +2,6 @@ import 'package:digit_assignment/models/dummy_data.dart';
 import 'package:digit_components/digit_components.dart';
 import 'package:digit_assignment/screens/form_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -23,27 +22,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> _searchById() async {
     String id = _idController.text;
-    // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
-    // String apiUrl = 'YOUR_API_ENDPOINT?id=$id';
-    //
-    // try {
-    //   final response = await http.get(Uri.parse(apiUrl));
-    //   if (response.statusCode == 200) {
-    //     List<dynamic> data = jsonDecode(response.body);
-    //     setState(() {
-    //       _searchResults = List<Map<String, dynamic>>.from(data);
-    //     });
-    //   } else {
-    //     // Handle error response
-    //     print('Failed to fetch data. Status code: ${response.statusCode}');
-    //   }
-    // } catch (e) {
-    //   // Handle network errors
-    //   print('Error: $e');
-    // }
-    _searchResults = DummyData.dummyList
-        .where((entry) => entry['tenantId'].toString() == id)
-        .toList();
+    if (id.isEmpty) {
+      _searchResults = DummyData.dummyList.toList();
+    } else {
+      _searchResults = DummyData.dummyList
+          .where((entry) => entry['tenantId'].contains(id))
+          .toList();
+    }
 
     setState(() {});
   }
