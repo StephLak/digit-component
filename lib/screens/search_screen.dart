@@ -1,3 +1,4 @@
+import 'package:digit_assignment/models/birth_registration/birth_registration_model.dart';
 import 'package:digit_assignment/models/dummy_data.dart';
 import 'package:digit_components/digit_components.dart';
 import 'package:digit_assignment/screens/form_screen.dart';
@@ -12,7 +13,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _idController = TextEditingController();
-  List<Map<String, dynamic>> _searchResults = [];
+  List<BirthRegistrationModel> _searchResults = [];
 
   @override
   void initState() {
@@ -23,17 +24,17 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<void> _searchById() async {
     String id = _idController.text;
     if (id.isEmpty) {
-      _searchResults = DummyData.dummyList.toList();
+      _searchResults = DummyData.dummyList;
     } else {
       _searchResults = DummyData.dummyList
-          .where((entry) => entry['tenantId'].contains(id))
+          .where((entry) => entry.tenantId.contains(id))
           .toList();
     }
 
     setState(() {});
   }
 
-  void _navigateToFormsScreen(Map<String, dynamic>? details) {
+  void _navigateToFormsScreen(BirthRegistrationModel? details) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => FormScreen(
@@ -112,13 +113,13 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
 
                           const SizedBox(height: 10),
-                          _buildDetailRow('Baby First Name', result['babyFirstName']),
-                          _buildDetailRow('Doctor Name', result['doctorName']),
-                          _buildDetailRow('Father', result['father']),
-                          _buildDetailRow('Hospital Name', result['hospitalName']),
-                          _buildDetailRow('Mother', result['mother']),
-                          _buildDetailRow('Place of Birth', result['placeOfBirth']),
-                          _buildDetailRow('Tenant ID', result['tenantId']),
+                          _buildDetailRow('Baby First Name', result.babyFirstName),
+                          _buildDetailRow('Doctor Name', result.doctorName),
+                          _buildDetailRow('Father', result.father),
+                          _buildDetailRow('Hospital Name', result.hospitalName),
+                          _buildDetailRow('Mother', result.mother),
+                          _buildDetailRow('Place of Birth', result.placeOfBirth),
+                          _buildDetailRow('Tenant ID', result.tenantId),
                         ],
                       ),
                     ),

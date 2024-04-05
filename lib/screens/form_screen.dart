@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:digit_assignment/models/birth_registration/birth_registration_model.dart';
 import 'package:digit_assignment/models/dummy_data.dart';
 import 'package:digit_assignment/screens/search_screen.dart';
 import 'package:digit_components/digit_components.dart';
@@ -8,7 +9,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 class FormScreen extends StatefulWidget {
   final String title;
-  final Map<String, dynamic>? details;
+  final BirthRegistrationModel? details;
   const FormScreen({required this.title, this.details, super.key});
 
   @override
@@ -150,19 +151,26 @@ class FormScreenState extends State<FormScreen> {
                                           action: (BuildContext context) {
                                             if (form.valid) {
                                               if (widget.details != null) {
-                                                int index = DummyData.dummyList.indexWhere((element) => element['id'] == widget.details?['id']);
+                                                int index = DummyData.dummyList.indexWhere((element) => element.id == widget.details?.id);
                                                 if (index != -1) {
-                                                  DummyData.dummyList[index] = form.value;
+                                                  DummyData.dummyList[index] = BirthRegistrationModel.fromJson(form.value).copyWith(id: widget.details!.id);
+                                                  form.reset();
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          'Yay ! Details Updated')));
                                                 }
 
                                               } else {
-                                                DummyData.dummyList.add(form.value);
+                                                final newModel = BirthRegistrationModel.fromJson(form.value);
+                                                final maxId = DummyData.dummyList.map((model) => model.id).fold(0, (prev, id) => id! > prev ? id : prev);
+                                                DummyData.dummyList.add(newModel.copyWith(id: maxId + 1));
+                                                form.reset();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        'Yay ! Details Submitted')));
                                               }
-                                              form.reset();
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      content: Text(
-                                                          'Yay ! Details Submitted')));
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(const SnackBar(
@@ -206,8 +214,8 @@ class FormScreenState extends State<FormScreen> {
 
     if (widget.details != null) {
       initialValues.forEach((key, value) {
-        if (widget.details!.containsKey(key)) {
-          initialValues[key] = widget.details![key];
+        if (widget.details!.toJson().containsKey(key)) {
+          initialValues[key] = widget.details!.toJson()[key];
         }
       });
     }
